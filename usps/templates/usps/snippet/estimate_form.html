@@ -1,0 +1,6 @@
+<h5> Enter package details </h5>
+	{{ form.as_p }}
+	<input type="hidden" name = "action" value = "shipping" />
+	<span>
+		<input type="submit" value ="get estimate" onclick="this.form.action='{% url "usps:api" action="shipping-estimate" %}' "/>
+	</span>

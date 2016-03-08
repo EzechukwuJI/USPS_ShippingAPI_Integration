@@ -1,0 +1,94 @@
+<html>
+	<head>
+		<title>USPS API - {{ action|title }}</title>
+	</head>
+	<style>
+		.center{
+			margin: 50 20% 0 20%;
+		}
+		a {
+			text-decoration: none;
+		}
+		input[type="text"],
+		input[type="number"],
+		select{
+			padding: 5px;
+		}
+	</style>
+	
+	<body>
+		<div class="center">
+			<div >
+				<button>
+					<a href="{% url 'usps:api' action="Tracking" %}"> Track Package </a>
+				</button>
+				<button>
+					<a href="{% url 'usps:api' action="ShippingEstimate" %}"> Get Shipping Estimate</a>
+				</button>
+				<button>
+					<a href="{% url 'usps:api' action="AddressVerification" %}"> Verify Address </a>
+				</button>
+			</div>
+			<div class = "center">
+				<form action = "" method="POST">
+					{% csrf_token %}
+					{% if action == "ShippingEstimate" %}
+
+						<h5> Enter package details </h5>
+						{{ form.as_p }}
+						<input type="hidden" name = "action" value = "shipping-estimate" />
+						<input type="hidden" name = "form_name" value = "ShippingEstimateForm" />
+						<span>
+							<input type="submit" value ="get estimate" onclick="this.form.action='{% url "usps:api" action="ShippingEstimate" %}' "/>
+						</span>
+					{% elif action == "Tracking" %}
+						<h5> Package Tracking </h5>
+						{{ form.as_p }}
+						<input type="hidden" name = "action" value = "tracking" />
+						<input type="hidden" name = "form_name" value = "TrackingForm" />
+						<span>
+							<input type="submit" value ="Track" onclick="this.form.action='{% url "usps:api" action="Tracking" %}' "/>
+						</span>
+					{% endif %}
+				</form>
+			</div>
+		</div>
+		{% if got_response %}
+			{% if action == "shipping-estimate" %}
+				<strong> Destination: </strong> <span> {{ destination }} </span>
+				{% if has_normal_speed %}
+					<h3>NORMAL DELIVERY</h3>
+					<strong>Normal Postage: </strong> &nbsp; <span> {{ normal_postage }} </span><br/>
+					<strong>Commercial Postage: </strong> &nbsp; <span> {{ normal_commercial }} </span><br/>
+					<strong>Duration: </strong> &nbsp; <span> {{ normal_duration }} </span><br/>
+					<strong>Description: </strong> &nbsp; <span> {{ normal_desc }} </span><br/>
+				{% endif %}
+
+				{% if has_express_speed %}
+					<h3>EXPRESS DELIVERY</h3>
+					<strong>Normal Postage: </strong> &nbsp; <span> {{ express_postage }} </span><br/>
+					<strong>Commercial Postage: </strong> &nbsp; <span> {{ express_commercial }} </span><br/>
+					<strong>Duration: </strong> &nbsp; <span> {{ express_duration }} </span><br/>
+					<strong>Description: </strong> &nbsp; <span> {{ express_desc }} </span><br/>
+				{% endif %}
+
+			{% else %}
+				<h2> coming soon </h2>
+			{% endif %}
+		{% elif server_error %}
+			<div class="center">
+				<h5> {{ request.action }} Not Successful! </h5>
+				{{ server_error_msg }}
+			</div>
+		{% endif %}
+	</body>
+
+	
+
+</html>
+
+
+
+
+
+
