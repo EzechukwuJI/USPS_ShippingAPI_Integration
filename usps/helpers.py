@@ -10,12 +10,9 @@ def get_url(request, action):
 	xml = ""
 	if action == "shipping-estimate":
 		ounce_weight = float(rp['weight']) * 16
-		print "ounce weight :", ounce_weight
-		print "pound weight: ", rp['weight']
-
 		xml += '''IntlRateV2&XML=
 		<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
-		<IntlRateV2Request USERID="593CIRCU5990">
+		<IntlRateV2Request USERID="xxxxxxxxxxxx">
 		<Revision>2</Revision>
 		<Package ID="0">
 		<Pounds> ''' + rp['weight'] + '''</Pounds>
@@ -37,17 +34,12 @@ def get_url(request, action):
 		</ExtraServices>
 		</Package>
 		</IntlRateV2Request> '''
-		print url + xml
+		# print url + xml
 	elif action == "tracking":
-		# print "tracking number: ", rp['trackingID'].replace(" ", "")
-		xml += '''TrackV2&XML=<TrackFieldRequest USERID="593CIRCU5990"><TrackID ID='''+ rp['trackingID'].replace(" ", "") +'''></TrackID></TrackFieldRequest>'''
-
-
-		
-		
+		xml += '''TrackV2&XML=<TrackFieldRequest USERID="xxxxxxxxxxxx"><TrackID ID='''+ rp['trackingID'].replace(" ", "") +'''></TrackID></TrackFieldRequest>'''
 	elif action == "address_verification":
 		xml = '''Verify&XML=<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
-		<AddressValidateRequest USERID="593CIRCU5990">
+		<AddressValidateRequest USERID="xxxxxxxxxxxx">
 		<Address>
 		<Address1></Address1>
 		<Address2>6406 Ivy Lane</Address2>
